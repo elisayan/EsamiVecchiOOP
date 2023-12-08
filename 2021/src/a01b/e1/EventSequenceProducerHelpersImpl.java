@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-
 public class EventSequenceProducerHelpersImpl implements EventSequenceProducerHelpers{
 
     public EventSequenceProducerHelpersImpl() {
@@ -56,14 +55,37 @@ public class EventSequenceProducerHelpersImpl implements EventSequenceProducerHe
 
     @Override
     public <E> Optional<Pair<Double, E>> nextAt(EventSequenceProducer<E> sequence, double time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'nextAt'");
+        Pair<Double, E> event = sequence.getNext();
+        while (event != null) {
+            if (event.get1() > time) {
+                return Optional.ofNullable(event);
+            }
+            try {
+                event = sequence.getNext();
+            } catch (Exception e) {
+                return Optional.empty();
+            }
+
+        }
+        return Optional.empty();
     }
 
     @Override
     public <E> EventSequenceProducer<E> filter(EventSequenceProducer<E> sequence, Predicate<E> predicate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'filter'");
+        return new EventSequenceProducer<E>() {
+
+            @Override
+            public Pair<Double, E> getNext() throws NoSuchElementException {
+                Pair<Double, E> event = sequence.getNext();
+                while (event != null) {
+                    if (predicate.test(event.get2())) {
+                        return event;
+                    }
+                    event = sequence.getNext();
+                }
+                return event;
+            }
+
+        };
     }
-    
 }
