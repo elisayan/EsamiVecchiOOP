@@ -2,12 +2,12 @@ package a01c.e1;
 
 import java.io.IOException;
 import java.io.*;
+import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import org.junit.runner.FilterFactory.FilterNotCreatedException;
 
 public class EventHistoryFactoryImpl implements EventHistoryFactory {
 
@@ -114,7 +114,8 @@ public class EventHistoryFactoryImpl implements EventHistoryFactory {
     public EventHistory<String> fromFile(String file) throws IOException {
         return new EventHistory<String>() {
 
-            private BufferedReader content = new BufferedReader(new FileReader(file));
+            Path path = Paths.get(file);
+            private BufferedReader content = Files.newBufferedReader(path, StandardCharsets.UTF_8);
             private String[] events;
             private int counter = 0;
             @Override
@@ -122,7 +123,6 @@ public class EventHistoryFactoryImpl implements EventHistoryFactory {
                 try {
                     events = content.readLine().split(":");
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return Double.parseDouble(events[counter++]);
