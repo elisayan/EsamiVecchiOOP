@@ -1,8 +1,6 @@
 package a03b.e1;
 
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * An interface to model several factories of Lenses, with many opportunities of reuse,
