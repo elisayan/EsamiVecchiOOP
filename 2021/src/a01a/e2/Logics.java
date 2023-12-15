@@ -1,11 +1,12 @@
 package a01a.e2;
 
-public interface Logics {
-    enum NumberButton {
-        FIRST, SECOND;
+public interface Logics{
+    enum buttonType {
+        FIRST, SECOND
     }
 
-    NumberButton press(int x, int y);
-    boolean getPressed(int x, int y);
+    buttonType hit(int x, int y);
+    boolean isHitted(int x, int y);
     boolean isOver();
+    
 }
