@@ -14,7 +14,7 @@ public class LogicsImpl implements Logics {
 
     @Override
     public buttonType hit(int x, int y) {
-        if (first==null) {
+        if (first == null) {
             first = new Pair<Integer, Integer>(x, y);
             selected.add(first);
             return buttonType.FIRST;
