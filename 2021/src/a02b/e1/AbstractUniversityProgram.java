@@ -15,12 +15,13 @@ public abstract class AbstractUniversityProgram implements UniversityProgram {
 
     @Override
     public boolean isValid(Set<String> courseNames) {
-        Set<Pair<Sector,Integer>> courses = courseNames.stream().map(coursesMap::get).collect(Collectors.toSet());
+        List<Pair<Sector,Integer>> courses = courseNames.stream().map(coursesMap::get).collect(Collectors.toList());
+        
         return getConstraint().stream().allMatch(c->isConstraintValid(c, courses));
     }
 
     private boolean isConstraintValid(Pair<Predicate<Sector>, Predicate<Integer>> p,
-            Set<Pair<Sector, Integer>> courses) {
+            List<Pair<Sector, Integer>> courses) {
         return p.get2().test(courses.stream().filter(e -> p.get1().test(e.get1()))
                 .mapToInt(c -> c.get2()).sum());
     }
