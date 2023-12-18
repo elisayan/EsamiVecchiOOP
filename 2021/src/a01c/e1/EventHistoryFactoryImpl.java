@@ -8,8 +8,33 @@ public class EventHistoryFactoryImpl implements EventHistoryFactory {
 
     @Override
     public <E> EventHistory<E> fromMap(Map<Double, E> map) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromMap'");
+        return new EventHistory<E>() {
+
+            private List<Double> keyHistory = map.keySet().stream().sorted().toList();
+            //private List<E> valuesHistory = map.values().stream().sorted().toList();
+            private Double actualKey = keyHistory.iterator().next();
+            @Override
+            public double getTimeOfEvent() {
+                return actualKey;
+            }
+
+            @Override
+            public E getEventContent() {
+                return map.get(actualKey);
+            }
+
+            @Override
+            public boolean moveToNextEvent() {
+                if(keyHistory.iterator().hasNext()){
+                    actualKey=keyHistory.iterator().next();
+                    return true;
+                }else {
+                     return false;
+                }
+               
+            }
+            
+        };
     }
 
     @Override
