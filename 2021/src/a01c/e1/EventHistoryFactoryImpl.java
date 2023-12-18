@@ -1,12 +1,7 @@
 package a01c.e1;
 
 import java.io.IOException;
-import java.io.*;
-import java.nio.file.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class EventHistoryFactoryImpl implements EventHistoryFactory {
@@ -15,27 +10,28 @@ public class EventHistoryFactoryImpl implements EventHistoryFactory {
     public <E> EventHistory<E> fromMap(Map<Double, E> map) {
         return new EventHistory<E>() {
 
-            private Iterator<Map.Entry<Double, E>> elements = map.entrySet().stream()
-                    .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey())).iterator();
-            private Map.Entry<Double, E> currentElement = elements.next();
+            private List<Double> keyHistory = map.keySet().stream().sorted().toList();
+            //private List<E> valuesHistory = map.values().stream().sorted().toList();
+            private Double actualKey = keyHistory.iterator().next();
             @Override
             public double getTimeOfEvent() {
-                return currentElement.getKey();
+                return actualKey;
             }
 
             @Override
             public E getEventContent() {
-                return currentElement.getValue();
+                return map.get(actualKey);
             }
 
             @Override
             public boolean moveToNextEvent() {
-                if(elements.hasNext()) {
-                    currentElement = elements.next();
+                if(keyHistory.iterator().hasNext()){
+                    actualKey=keyHistory.iterator().next();
                     return true;
-                } else {
-                    return false;
+                }else {
+                     return false;
                 }
+               
             }
             
         };
@@ -43,104 +39,26 @@ public class EventHistoryFactoryImpl implements EventHistoryFactory {
 
     @Override
     public <E> EventHistory<E> fromIterators(Iterator<Double> times, Iterator<E> content) {
-        return new EventHistory<E>() {
-
-            @Override
-            public double getTimeOfEvent() {
-                return times.next();
-            }
-
-            @Override
-            public E getEventContent() {
-                return content.next();
-            }
-
-            @Override
-            public boolean moveToNextEvent() {
-                return times.hasNext() && content.hasNext();
-            }
-            
-        };
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'fromIterators'");
     }
 
     @Override
     public <E> EventHistory<E> fromListAndDelta(List<E> content, double initial, double delta) {
-        return new EventHistory<E>() {
-
-            private int index = 0;
-            private int indexList = 0;
-            @Override
-            public double getTimeOfEvent() {
-                return initial + delta * index++;
-            }
-
-            @Override
-            public E getEventContent() {
-                return content.get(indexList++);
-            }
-
-            @Override
-            public boolean moveToNextEvent() {
-                return indexList < content.size();
-            }
-            
-        };
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'fromListAndDelta'");
     }
 
     @Override
     public <E> EventHistory<E> fromRandomTimesAndSupplier(Supplier<E> content, int size) {
-        return new EventHistory<E>() {
-
-            private int counter = 0;
-            @Override
-            public double getTimeOfEvent() {
-                return Math.random();
-            }
-
-            @Override
-            public E getEventContent() {
-                return content.get();
-            }
-
-            @Override
-            public boolean moveToNextEvent() {
-                return ++counter < size;
-            }
-            
-        };
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'fromRandomTimesAndSupplier'");
     }
 
     @Override
     public EventHistory<String> fromFile(String file) throws IOException {
-        return new EventHistory<String>() {
-
-            Path path = Paths.get(file);
-            private BufferedReader content = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-            private String[] events;
-            private int counter = 0;
-            @Override
-            public double getTimeOfEvent() {
-                try {
-                    events = content.readLine().split(":");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return Double.parseDouble(events[counter++]);
-            }
-
-            @Override
-            public String getEventContent() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getEventContent'");
-            }
-
-            @Override
-            public boolean moveToNextEvent() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'moveToNextEvent'");
-            }
-            
-        };
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'fromFile'");
     }
 
 }

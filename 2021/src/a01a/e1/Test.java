@@ -146,7 +146,7 @@ public class Test {
 		// aggiorna lo stato incrementando 1 su la lunghezza della stringa è 0 
 		BiFunction<String,Integer,Optional<Integer>> stateFunction =
 				(s,i) -> Optional.of(i + (s.length()==0 ? 1 : 0));
-		// dà in uscita lo stato accumulatop 
+		// dà in uscita lo stato accumulato
 		Function<Integer, Optional<Integer>> outputFunction = s -> Optional.of(s);
 		// Questo acceptor è lo stesso della testCountEmptyString
 		var acceptor = this.factory.generalised(0,stateFunction,outputFunction);
