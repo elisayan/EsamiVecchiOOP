@@ -13,25 +13,25 @@ public class GUI extends JFrame {
 
     public GUI(int size) {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(50*size, 50*size);
-        logics= new LogicImpl();
+        this.setSize(50 * size, 50 * size);
+        logics = new LogicImpl();
 
-        JPanel panel = new JPanel(new GridLayout(size,size));
+        JPanel panel = new JPanel(new GridLayout(size, size));
         this.getContentPane().add(panel);
-        
+
         ActionListener al = e -> {
-        	var button = (JButton)e.getSource();
-            Pair<Integer,Integer> position = cells.get(button);
-            
+            var button = (JButton) e.getSource();
+            Pair<Integer, Integer> position = cells.get(button);
+
             boolean result = logics.hit(position.getX(), position.getY());
-        	if (result) {
-        		for (var entry: cells.entrySet()) {
-        			if (logics.isHitted(entry.getValue().getX(),entry.getValue().getY())) {
-        				entry.getKey().setText("*");
-        			}
-        		}
-        	}
-        	button.setEnabled(false); 
+            if (result) {
+                for (var entry : cells.entrySet()) {
+                    if (logics.isHitted(entry.getValue().getX(), entry.getValue().getY())) {
+                        entry.getKey().setText("*");
+                    }
+                }
+            }
+            button.setEnabled(false); 
         };
                 
         for (int i=0; i<size; i++){
