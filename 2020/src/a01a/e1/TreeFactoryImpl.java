@@ -6,30 +6,30 @@ public class TreeFactoryImpl implements TreeFactory {
 
     @Override
     public <E> Tree<E> singleValue(E root) {
-        return new Tree<E>() {
+        return null;
+        // return new Tree<E>() {
 
-            @Override
-            public E getRoot() {
-                return root;
-            }
+        //     @Override
+        //     public E getRoot() {
+        //         return root;
+        //     }
 
-            @Override
-            public List<Tree<E>> getChildren() {
-                return new LinkedList<Tree<E>>(root);
-            }
+        //     @Override
+        //     public List<Tree<E>> getChildren() {
+        //         return new LinkedList<Tree<E>>(root);
+        //     }
 
-            @Override
-            public Set<E> getLeafs() {
-                return new HashSet<E>(root);
-            }
+        //     @Override
+        //     public Set<E> getLeafs() {
+        //         return new HashSet<E>(root);
+        //     }
 
-            @Override
-            public Set<E> getAll() {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'getAll'");
-            }
+        //     @Override
+        //     public Set<E> getAll() {
+                
+        //     }
             
-        };
+        // };
     }
 
     @Override
