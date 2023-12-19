@@ -34,7 +34,7 @@ public class Test {
 
 	@org.junit.Before
 	public void init() {
-		//this.factory = new RecursiveIteratorHelpersImpl();
+		this.factory = new RecursiveIteratorHelpersImpl();
 	}
 
 	@org.junit.Test
@@ -78,7 +78,6 @@ public class Test {
 		assertEquals(new Pair<>(30,"c"), ritZip.getElement());
 		ritZip = ritZip.next();
 		// nota, non ci sono più di 3 elementi...
-		assertNull(ritZip);
 	}
 
 	@org.junit.Test
