@@ -1,7 +1,6 @@
 package a02a.e2;
 
 import java.util.*;
-import java.util.random.*;
 
 public class LogicsImpl implements Logics{
 
@@ -14,8 +13,7 @@ public class LogicsImpl implements Logics{
 			this.x = x;
 			this.y = y;
 		}
-		
-		Direction next() {
+        Direction next() {
 			return Direction.values()[(this.ordinal()+1) % Direction.values().length];
 		}
 	}
@@ -31,15 +29,24 @@ public class LogicsImpl implements Logics{
     
     @Override
     public Optional<Pair<Integer, Integer>> next() {
-        int i = 0;
-        Pair<Integer, Integer> previous;
         if (open.isEmpty()) {
             Random random = new Random();
             open.add(new Pair<Integer, Integer>(random.nextInt(size), random.nextInt(size)));
-            previous = open.get(i++);
-            return Optional.of(previous);
+            return Optional.of(open.get(0));
         }
-        previous = open.get(i++);
-        return Optional.of(new Pair<Integer, Integer>(previous.getX() + direction.x, previous.getY() + direction.y));
+        Pair<Integer, Integer> last = open.get(open.size() - 1);
+        for (int i = 0; i < 4; i++) {
+
+            Pair<Integer, Integer> move = new Pair<Integer, Integer>(last.getX() + direction.x,
+                    last.getY() + direction.y);
+            if (!open.contains(move) && move.getX() >= 0 && move.getY() >= 0 && move.getX() < size
+                    && move.getY() < size) {
+                open.add(move);
+                return Optional.of(move);
+            }
+            direction = direction.next();
+
+        }
+        return Optional.empty();
     }
 }
