@@ -1,6 +1,7 @@
 package a02a.e2;
 
+import java.util.*;
+
 public interface Logics {
-    boolean hit(int x, int y);
-    boolean isOpened(int x, int y);    
+    Optional<Pair<Integer,Integer>> next();  
 }
