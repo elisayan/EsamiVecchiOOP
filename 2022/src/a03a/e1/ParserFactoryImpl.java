@@ -11,8 +11,12 @@ public class ParserFactoryImpl implements ParserFactory {
 
             @Override
             public boolean accept(Iterator<X> iterator) {
+                List<X> copy = new LinkedList<>();
+                while(iterator.hasNext()){
+                    copy.add(iterator.next());
+                }
                 for (List<X> acceptedList : acceptedSequences) {
-                    if(acceptedList.iterator().equals(iterator)){
+                        if(copy.equals(acceptedList)){
                         return true;
                     }                    
                 }   
@@ -28,17 +32,27 @@ public class ParserFactoryImpl implements ParserFactory {
 
             @Override
             public boolean accept(Iterator<X> iterator) {
-                Deque<X> copy = new LinkedList<>();
-                copy.add(x0);
-                while(iterator.hasNext()){
-                    copy.add(iterator.next());
+                if (!iterator.hasNext()) {
+                    return false;
                 }
-                List<Pair<X,X>> pairList = new LinkedList<>();
-                for (Pair<X,X> pair : pairList) {
-                    pairList.add(new Pair<X,X>(copy.poll(), iterator.next()));
-                     return transitions.contains(pair) && pair.getY().equals(acceptanceInputs.iterator().next());
-                }             
-                return false;
+
+                Deque<X> copy = new LinkedList<>();
+                List<Pair<X, X>> pairList = new LinkedList<>();
+                copy.add(x0);
+
+                while (iterator.hasNext()) {
+                    X value = iterator.next();
+                    copy.add(value);
+                    pairList.add(new Pair<X, X>(copy.poll(), value));
+                }
+                
+                for (Pair<X, X> pair : pairList) {
+                    if (!transitions.contains(pair)) {
+                        return false;
+                    }
+                }
+
+                return pairList.get(pairList.size() - 1).getY().equals(acceptanceInputs.iterator().next());
                
             }
             
