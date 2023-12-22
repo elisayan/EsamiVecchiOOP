@@ -45,7 +45,7 @@ public class ParserFactoryImpl implements ParserFactory {
                     copy.add(value);
                     pairList.add(new Pair<X, X>(copy.poll(), value));
                 }
-                
+
                 for (Pair<X, X> pair : pairList) {
                     if (!transitions.contains(pair)) {
                         return false;
@@ -61,8 +61,31 @@ public class ParserFactoryImpl implements ParserFactory {
 
     @Override
     public <X> Parser<X> fromIteration(X x0, Function<X, Optional<X>> next) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromIteration'");
+        return new Parser<X>() {
+
+            @Override
+            public boolean accept(Iterator<X> iterator) {
+                List<X> correctList = new LinkedList<>();
+                List<X> copyList = new LinkedList<>();
+                X first = iterator.next();
+                copyList.add(first);
+                correctList.add(x0);
+                if(first.equals(x0)){
+                    while (iterator.hasNext()) {
+                        Optional<X> correct = next.apply(first);
+                        if (correct.isPresent()) {
+                            first=iterator.next();
+                            copyList.add(first);
+                            correctList.add(correct.get());
+                            
+                        }
+                        
+                    }
+                }
+                return correctList.equals(copyList);
+            }
+            
+        };
     }
 
     @Override
