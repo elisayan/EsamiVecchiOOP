@@ -70,16 +70,14 @@ public class ParserFactoryImpl implements ParserFactory {
                 X first = iterator.next();
                 copyList.add(first);
                 correctList.add(x0);
-                if(first.equals(x0)){
+                if (first.equals(x0)) {
                     while (iterator.hasNext()) {
                         Optional<X> correct = next.apply(first);
                         if (correct.isPresent()) {
-                            first=iterator.next();
+                            first = iterator.next();
                             copyList.add(first);
                             correctList.add(correct.get());
-                            
                         }
-                        
                     }
                 }
                 return correctList.equals(copyList);
