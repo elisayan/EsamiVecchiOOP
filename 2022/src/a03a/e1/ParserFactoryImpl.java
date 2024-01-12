@@ -12,17 +12,17 @@ public class ParserFactoryImpl implements ParserFactory {
             @Override
             public boolean accept(Iterator<X> iterator) {
                 List<X> copy = new LinkedList<>();
-                while(iterator.hasNext()){
+                while (iterator.hasNext()) {
                     copy.add(iterator.next());
                 }
                 for (List<X> acceptedList : acceptedSequences) {
-                        if(copy.equals(acceptedList)){
+                    if (copy.equals(acceptedList)) {
                         return true;
-                    }                    
-                }   
+                    }
+                }
                 return false;
             }
-            
+
         };
     }
 
@@ -53,49 +53,40 @@ public class ParserFactoryImpl implements ParserFactory {
                 }
 
                 return pairList.get(pairList.size() - 1).getY().equals(acceptanceInputs.iterator().next());
-               
+
             }
-            
+
         };
     }
 
     @Override
     public <X> Parser<X> fromIteration(X x0, Function<X, Optional<X>> next) {
-        return new Parser<X>() {
 
-            @Override
-            public boolean accept(Iterator<X> iterator) {
-                List<X> correctList = new LinkedList<>();
-                List<X> copyList = new LinkedList<>();
-                X first = iterator.next();
-                copyList.add(first);
-                correctList.add(x0);
-                if (first.equals(x0)) {
-                    while (iterator.hasNext()) {
-                        Optional<X> correct = next.apply(first);
-                        if (correct.isPresent()) {
-                            first = iterator.next();
-                            copyList.add(first);
-                            correctList.add(correct.get());
-                        }
-                    }
-                }
-                return correctList.equals(copyList);
-            }
-            
-        };
+        return recursive(x -> x.equals(x0)
+                ? Optional.of(next.apply(x0).map(y -> fromIteration(y, next))
+                        .orElse(fromFinitePossibilities(Set.of(Collections.emptyList()))))  
+                : Optional.empty(), false);
+
     }
 
     @Override
     public <X> Parser<X> recursive(Function<X, Optional<Parser<X>>> nextParser, boolean isFinal) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'recursive'");
+        return new Parser<X>() {
+
+            @Override
+            public boolean accept(Iterator<X> iterator) {
+                while (iterator.hasNext()) {
+                    return nextParser.apply(iterator.next()).map(p -> p.accept(iterator)).orElse(false);
+                }
+                return isFinal;
+            }
+
+        };
     }
 
     @Override
-    public <X> Parser<X> fromParserWithInitial(X x, Parser<X> parser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromParserWithInitial'");
+    public <X> Parser<X> fromParserWithInitial(X x, Parser<X> parser) {        
+        return recursive(x1 -> x1.equals(x) ? Optional.of(parser) : Optional.empty(), false);
     }
 
 }
