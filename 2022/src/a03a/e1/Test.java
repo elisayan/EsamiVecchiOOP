@@ -35,7 +35,7 @@ public class Test {
 
 	@org.junit.Before
 	public void init() {
-		// this.factory = new ParserFactoryImpl();
+		this.factory = new ParserFactoryImpl();
 	}
 
 	@org.junit.Test
@@ -80,7 +80,7 @@ public class Test {
 				new Pair<>(2,3)),
 			Set.of(3));
 		assertTrue(parser.accept(List.of(1,1,1,2,2,2,3).iterator()));
-		assertTrue(parser.accept(List.of(2,2,2,2,3).iterator()));
+		assertTrue(parser.accept(List.of(1,2,2,2,3).iterator()));
 		assertFalse(parser.accept(List.of(1,1,1,3).iterator()));
 		assertFalse(parser.accept(List.of(1,1,1,2,2,3,3).iterator()));
 		assertFalse(parser.accept(List.of(1,2).iterator()));
