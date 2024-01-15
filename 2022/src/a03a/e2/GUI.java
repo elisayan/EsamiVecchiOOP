@@ -9,12 +9,17 @@ import java.awt.event.*;
 
 public class GUI extends JFrame {
     
-    private final Map<Pair<Integer,Integer>, JButton> cells = new HashMap<>();
+    private final Map<JButton, Pair<Integer,Integer>> cells = new HashMap<>();
+    private Logics logic;
     private Random random = new Random();
+    private Pair<Integer,Integer> robot;
+    private Pair<Integer,Integer> uman;
+    private int c=0;
 
     public GUI(int size) {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100*size, 100*size);
+        this.logic = new LogicsImpl();
         
         JPanel panel = new JPanel(new GridLayout(size,size));
         this.getContentPane().add(panel);
@@ -23,8 +28,15 @@ public class GUI extends JFrame {
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
         	    var button = (JButton)e.getSource();
-        	    //var position = cells.get(button);
-                button.setText("");
+                var position = cells.keySet().iterator().next();
+                
+                System.out.println(position);
+                if (logic.umanMove(position.getX(), position.getY(), uman)) {
+                    button.setText("o");
+                    uman=new Pair<Integer,Integer>(position.getX(), position.getY());
+                }
+        	    
+                //button.setText("");
             }
         };
                 
@@ -32,19 +44,25 @@ public class GUI extends JFrame {
             for (int j=0; j<size; j++){
                 final JButton jb = new JButton(" ");
                 this.cells.put(new Pair<Integer,Integer>(i, j), jb);
+                
                 jb.addActionListener(al);
                 panel.add(jb);
             }
         }
+        
+        setRandomRobotAndUman(size); 
 
-        Pair<Integer,Integer> robot = new Pair<Integer, Integer>(this.random.nextInt(size), this.random.nextInt(size));
-        Pair<Integer,Integer> uman = new Pair<Integer, Integer>(this.random.nextInt(size), this.random.nextInt(size));
-        System.out.println(robot);
-        System.out.println(uman);
-        System.out.println(cells);
+        this.setVisible(true);
+    } 
+    
+    private void setRandomRobotAndUman(int size){
+        System.out.println("count: "+c++);
+        robot = new Pair<Integer, Integer>(this.random.nextInt(size), this.random.nextInt(size));
+        uman = new Pair<Integer, Integer>(this.random.nextInt(size), this.random.nextInt(size));
+        if (robot.equals(uman)) {
+            robot = new Pair<Integer, Integer>(this.random.nextInt(size), this.random.nextInt(size));
+        }
         cells.get(robot).setText("*");
         cells.get(uman).setText("o");
-        
-        this.setVisible(true);
-    }    
+    }
 }
