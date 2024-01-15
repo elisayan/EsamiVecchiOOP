@@ -35,7 +35,7 @@ public class Test {
 
 	@org.junit.Before
 	public void init() {
-		// this.factory = new LazyTreeFactoryImpl();
+		this.factory = new LazyTreeFactoryImpl();
 	}
 
 	@org.junit.Test
@@ -61,6 +61,7 @@ public class Test {
 		// figlio sx del "2" di nuovo "1", figlio dx del "2" di nuovo il "2"
 		// da trattare come dei "loop"
 		// il "4" non ha figli
+        
 		var tree = this.factory.fromMap("1", Map.of(
 			"1", new Pair<>("2","3"),
 			"2", new Pair<>("1","2"),
