@@ -4,39 +4,50 @@ import java.util.*;
 
 public class LogicsImpl implements Logics {
 
-    enum Direction {
-        NORD(0, -1), SUD(0, 1), EST(1, 0), OVEST(-1, 0);
+    private Pair<Integer, Integer> humanDestination;
+    private Pair<Integer, Integer> computerDestination;
+    private int size;
+    private Random random = new Random();
 
-        int x, y;
+    public LogicsImpl(int size) {
+        this.size = size;
+    }
 
-        Direction(int x, int y) {
-            this.x = x;
-            this.y = y;
+    @Override
+    public boolean humanMove(int x, int y, Pair<Integer, Integer> human) {
+        this.humanDestination = new Pair<Integer, Integer>(x, y);
+        return humanDestination.getX().equals(human.getX()) || humanDestination.getY().equals(human.getY());
+    }
+
+    @Override
+    public Pair<Integer, Integer> computerMove(Pair<Integer, Integer> computer) {
+        computerDestination = new Pair<Integer, Integer>(random.nextInt(size), random.nextInt(size));
+
+        while (computerDestination.equals(computer) && (!computerDestination.getX().equals(computer.getX())
+                || !computerDestination.getY().equals(computer.getY()))) {
+            computerDestination = new Pair<Integer, Integer>(random.nextInt(size), random.nextInt(size));
         }
 
-    }
-
-    private Pair<Integer, Integer> umanDestination;
-    private Direction direction;
-
-    @Override
-    public boolean umanMove(int x, int y, Pair<Integer,Integer> uman) {
-        this.umanDestination = new Pair<Integer,Integer>(x, y);
-        System.out.println("destination: "+umanDestination);
-        System.out.println("uman: "+uman);
-        return umanDestination.getX().equals(uman.getX()) || umanDestination.getY().equals(uman.getY());
+        return computerDestination;
     }
 
     @Override
-    public boolean isOver() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isOver'");
+    public boolean computerWins(Pair<Integer, Integer> computer, Pair<Integer, Integer> human) {
+        if (computer.getX().equals(human.getX()) || computer.getY().equals(human.getY())) {
+            this.computerDestination = human;
+            System.out.println("computer wins");
+            return true;
+        }
+
+        return false;
     }
 
     @Override
-    public boolean umanOrigin(int x, int y) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'umanOrigin'");
+    public boolean humanWins(Pair<Integer, Integer> computer) {
+        if (humanDestination.equals(computer)) {
+            System.out.println("human wins");
+            return true;
+        }
+        return false;
     }
-    
 }
