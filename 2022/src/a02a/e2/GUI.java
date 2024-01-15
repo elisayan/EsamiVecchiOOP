@@ -27,7 +27,15 @@ public class GUI extends JFrame {
                 button.setText("B");
                 for (var entry : cells.entrySet()) {
                     entry.getKey().setEnabled(!logic.isDiagonal(entry.getValue().getX(), entry.getValue().getY()));
-                    //entry.getKey().setText(logic.isDiagonal(entry.getValue().getX(), entry.getKey().getY()) ? "" : "");
+                    //entry.getKey().setText(logic.isBishop(entry.getValue().getX(), entry.getKey().getY()) ? "B" : "");
+                }
+
+                if (logic.isOver()) {
+                    for (var entry : cells.entrySet()) {
+                        if (logic.isBishop(entry.getValue().getX(), entry.getValue().getY())) {
+                            entry.getKey().setText("");
+                        }
+                    }
                 }
 
             }

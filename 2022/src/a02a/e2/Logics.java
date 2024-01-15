@@ -6,4 +6,6 @@ public interface Logics {
     boolean isDiagonal(int x, int y);
 
     boolean isBishop(int x, int y);
+
+    boolean isOver();
 }

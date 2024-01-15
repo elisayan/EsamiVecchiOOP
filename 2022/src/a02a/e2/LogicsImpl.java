@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LogicsImpl implements Logics {
     int size;
-    List<Pair<Integer, Integer>> cellsB = new LinkedList<>();
+    Set<Pair<Integer, Integer>> cellsB = new HashSet<>();
     Set<Pair<Integer, Integer>> diagonal = new HashSet<>();
 
     public LogicsImpl(int size) {
@@ -46,7 +46,8 @@ public class LogicsImpl implements Logics {
         return diagonal.contains(new Pair<Integer, Integer>(x, y));
     }
 
-    private boolean isOver() {
+    @Override
+    public boolean isOver() {
         System.out.println("diagonal size: " + diagonal.size() + " B size: " + cellsB.size());
         return diagonal.size() + cellsB.size() == size * size;
     }
